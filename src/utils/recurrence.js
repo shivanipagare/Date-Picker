@@ -45,14 +45,19 @@ export function getRecurringDates({ startDate, endDate, type, interval, selected
 }
 
 function getNthWeekdayOfMonth(year, month, weekday, nth) {
+  // Convert weekday string (e.g., "Tue") to number (0=Sun, 1=Mon, 2=Tue...)
+  const dayMap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  const weekdayNum = typeof weekday === "string" ? dayMap[weekday] : weekday;
+
   let date = new Date(year, month, 1);
   let count = 0;
+
   while (date.getMonth() === month) {
-    if (date.getDay() === weekday) {
+    if (date.getDay() === weekdayNum) {
       count++;
-      if (count === nth) return new Date(date);
+      if (count === nth) return new Date(date); // Return nth weekday
     }
     date.setDate(date.getDate() + 1);
   }
-  return null;
+  return null; // If nth weekday doesn't exist in this month
 }
